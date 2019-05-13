@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Net.HTTP;
+using System.Net.Http;
 using UnityEngine;
 
 public class Vault : MonoBehaviour
@@ -21,7 +21,7 @@ public class Vault : MonoBehaviour
 
 	void Login(string username, string password)
 	{
-		Dictionary<string, string> parameters = new Dictionary<string, string>();
+		Dictionary<string, string> parameters = new Dictionary<string, string>() { };
 		parameters.Add("display", "popup");
 		parameters.Add("scope", "openid profile email");
 		parameters.Add("client_id", "keyforge-web-portal");
@@ -31,14 +31,20 @@ public class Vault : MonoBehaviour
 
 		FormUrlEncodedContent urlParameters = new FormUrlEncodedContent(parameters);
 
-		Dictionary<string, string> loginParameters = Dictionary<string, string>();
+		Dictionary<string, string> loginParameters = new Dictionary<string, string>() { };
+		loginParameters.Add("display", "popup");
+		loginParameters.Add("scope", "openid profile email");
+		loginParameters.Add("client_id", "keyforge-web-portal");
+		loginParameters.Add("state", "/");
+		loginParameters.Add("redirect_uri", "https://www.keyforgegame.com/authorize");
+		loginParameters.Add("nonce", "4HM~Z5f8");
 		loginParameters.Add("login", username);
 		loginParameters.Add("password", password);
 
-		FormUrlEncodedContent loginParameters = new FormUrlEncodedContent(loginParameters);
+		FormUrlEncodedContent loginFormParameters = new FormUrlEncodedContent(loginParameters);
 
 		string path = string.Format("https://account.asmodee.net/en/signin?{0}", urlParameters);
-		HttpResponseMessage response = await client.PostAsync(path, loginParameters);
+		HttpResponseMessage response = await client.PostAsync(path, loginFormParameters);
 	}
 
 }
@@ -84,7 +90,7 @@ public class VaultUser
 
 	public string Location
 	{
-		get { return location }
+		get { return location; }
 		set { location = value; }
 	}
 
